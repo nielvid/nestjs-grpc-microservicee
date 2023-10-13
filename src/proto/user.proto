@@ -1,0 +1,67 @@
+syntax="proto3";
+// import "anotherprotofile.proto"; //can import another proto file
+
+package user_service;
+
+option go_package="/proto";
+
+service UserService{
+    rpc CreateUser(UserParams)returns(AuthUser){} // unary
+    rpc FindUsers(NoParams)returns (Users){}
+
+    rpc FetchUsers(NoParams)returns (stream User){} //server streaming
+    rpc VerifyUsers(stream Params)returns (VerificationResponse){} //client streaming
+    rpc FindUser (UserId) returns (User){}
+    rpc DeleteUser (UserId) returns (User){}
+    rpc Chat(stream ChatMessage)returns (stream ChatMessage){} //bidirectional streaming
+}
+
+message UserParams{
+    string firstname       = 1;
+    string  lastname    = 2;
+   optional string  phoneNumber =   3;
+    string  email       =   4;
+    string  password    = 5;
+}
+
+message NoParams{}
+
+message Params{
+    string id = 1;
+}
+
+
+message VerificationResponse{
+    string  message = 1;
+}
+
+message ChatMessage{
+    string  message = 1;
+}
+
+
+
+message AuthUser{
+    string  id      =    1;
+    string firstname       = 2;
+    string  lastname    = 3;
+    optional string  phoneNumber =   4;
+    string  email       =   5;
+    string  accessToken    = 6;
+}
+
+message User{
+    string  id      =    1;
+    string firstname       = 2;
+    string  lastname    = 3;
+    optional string  phoneNumber =   4;
+    string  email       =   5;
+}
+
+message Users{
+   repeated User users = 1;
+}
+
+message UserId{
+   string id = 1;
+}
